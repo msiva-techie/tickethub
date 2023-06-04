@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-sc
+provisioner: docker.io/hostpath
+volumeBindingMode: Immediate
+reclaimPolicy: Delete
+parameters:
+  path: /c/k8s/

@@ -17,3 +17,10 @@ spec:
                 name: auth-serv
                 port:
                   number: 8000
+          - pathType: Prefix
+            path: /db/
+            backend:
+              service:
+                name: mongo-svc
+                port:
+                  number: 27017
