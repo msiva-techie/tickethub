@@ -14,6 +14,6 @@ export abstract class EventPublisher<T extends Event> {
   async publish(data: T["data"]) {
     const buffer = Buffer.from(JSON.stringify(data), "utf-8");
     console.log("Publishing event to the subject ", this.subject);
-    return this.client.publish(this.subject, buffer);
+    return this.client.publish(this.subject as string, buffer);
   }
 }

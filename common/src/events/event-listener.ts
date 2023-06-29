@@ -24,7 +24,7 @@ export abstract class EventListener<T extends Event> {
       .durable(this.durableName)
       .deliverTo(createInbox());
 
-    const sub = await this.client.subscribe(this.subject, options);
+    const sub = await this.client.subscribe(this.subject as string, options);
     for await (const m of sub) {
       console.log(`Message received: ${this.subject} / ${this.queueGroupName}`);
       const parsedMessage = JSON.parse(m.data.toString());

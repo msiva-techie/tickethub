@@ -2,13 +2,13 @@
   "name": "@sivam/tickethub-common",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "build/**/*"
+    "dist/**/*"
   ],
   "scripts": {
-    "clean": "del build",
+    "clean": "del dist",
     "build": "npm run clean && tsc",
     "pub": "git add . && git commit -m \"updates\" && npm run build && npm publish",
     "start": "npm run build && node dist/index.js",
