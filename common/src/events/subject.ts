@@ -3,16 +3,26 @@ import { Streams } from "./streams";
 const orderStream = Streams.Order;
 const paymentStream = Streams.Payment;
 const ticketStream = Streams.ticket;
-const expiration = Streams.expiration;
+const expirationStream = Streams.expiration;
+
+const orderCreated = `${orderStream}.created`;
+const orderCancelled = `${orderStream}.cancelled`;
+
+const paymentCompleted = `${paymentStream}.completed`;
+
+const expirationCompleted = `${expirationStream}.completed`;
+
+const ticketCreated = `${ticketStream}.created`;
+const ticketCancelled = `${ticketStream}.updated`;
 
 export enum Subjects {
-  OrderCreated = `${orderStream}.created`,
-  OrderCancelled = `${orderStream}.cancelled`,
+  OrderCreated = orderCreated,
+  OrderCancelled = orderCancelled,
 
-  PaymentCompleted = `${paymentStream}.completed`,
+  PaymentCompleted = paymentCompleted,
 
-  ExpirationCompleted = `${expiration}.completed`,
+  ExpirationCompleted = expirationCompleted,
 
-  TicketCreated = `${ticketStream}.created`,
-  TicketUpdated = `${ticketStream}.updated`
+  TicketCreated = ticketCreated,
+  TicketUpdated = ticketCancelled
 }
