@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  serviceName: redis
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      initContainers:
+      - name: config
+        image: redis:7.0.11-alpine
+        command: [ "sh", "-c" ]
+        args:
+          - |
+            cp /tmp/redis/redis.conf /etc/redis/redis.conf
+            
+            echo "finding master..."
+            MASTER_FDQN=`hostname  -f | sed -e 's/redis-[0-9]\./redis-0./'`
+            if [ "$(hostname)" = "redis-0" ]; then
+              echo "this is redis-0, not updating config..."
+            else
+              echo "updating redis.conf..."
+              echo "replicaof $MASTER_FDQN 6379" >> /etc/redis/redis.conf
+            fi
+        volumeMounts:
+        - name: redis-config
+          mountPath: /etc/redis/
+        - name: config
+          mountPath: /tmp/redis/
+      containers:
+      - name: redis
+        image: redis:7.0.10-alpine
+        command: ["redis-server"]
+        args: ["/etc/redis/redis.conf"]
+        ports:
+        - containerPort: 6379
+          name: redis
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        - name: redis-config
+          mountPath: /etc/redis/
+      volumes:
+      - name: redis-config
+        emptyDir: {}
+      - name: config
+        configMap:
+          name: redis-config
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: local-sc
+      resources:
+        requests:
+          storage: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  clusterIP: None
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: redis
+  selector:
+    app: redis

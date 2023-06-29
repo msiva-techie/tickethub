@@ -19,9 +19,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sivam96/tickethub-common": "^1.0.1",
+    "@types/body-parser": "^1.19.2",
+    "@types/cookie-parser": "^1.4.3",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/method-override": "^0.0.32",
+    "@types/morgan": "^1.9.4",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "moongoose": "^0.0.5",
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^7.3.0",
+    "morgan": "^1.10.0",
     "nats": "^2.14.0"
   },
   "devDependencies": {

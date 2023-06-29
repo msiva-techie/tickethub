@@ -3,13 +3,21 @@ kind: Ingress
 metadata:
   name: ingress-service
   annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
   ingressClassName: nginx
   rules:
-    - host: tickethub.dev
+    - host: ticket.dev
       http:
         paths:
+          # - pathType: Prefix
+          #   path: /
+          #   backend:
+          #     service:
+          #       name: auth-serv
+          #       port:
+          #         number: 8000
           - pathType: Prefix
             path: /api/auth/?(.*)
             backend:
@@ -17,10 +25,3 @@ spec:
                 name: auth-serv
                 port:
                   number: 8000
-          - pathType: Prefix
-            path: /db/
-            backend:
-              service:
-                name: mongo-svc
-                port:
-                  number: 27017

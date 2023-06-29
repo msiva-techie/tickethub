@@ -18,7 +18,20 @@ spec:
           image: sivam96/auth
           env:
           - name: MONGO_URI
-            value: 'mongodb://mongo-0.mongo-svc.default.svc.cluster.local:27017,mongo-1.mongo-svc.default.svc.cluster.local:27017'
+            valueFrom:
+              configMapKeyRef:
+                name: auth-config
+                key: mongoUrl
+          - name: JWT_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: auth-config
+                key: jwtKey
+          - name: COOKIE_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: auth-config
+                key: cookieKey
 ---
 apiVersion: v1
 kind: Service
