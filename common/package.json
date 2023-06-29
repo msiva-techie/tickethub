@@ -1,5 +1,5 @@
 {
-  "name": "@sivam/tickethub-common",
+  "name": "@sivam96/tickethub-common",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "del-cli dist",
     "build": "npm run clean && tsc",
-    "pub": "git add . && git commit -m \"updates\" && npm run build && npm publish --access public",
+    "pub": "git add . && git commit -m \"updates\" && npm version patch && npm run build && npm publish --access public",
     "start": "npm run build && node dist/index.js",
     "start-dev": "concurrently \"tsc --watch\" \"nodemon -q dist/index.js\"",
     "lint": "eslint src/**/*.ts",
