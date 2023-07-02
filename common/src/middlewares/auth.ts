@@ -17,7 +17,7 @@ declare global {
 }
 
 export const getCurrentUser = (req: Request, res: Response, next: NextFunction) => {
-  const accessToken = req.signedCookies.accessToken;
+  const accessToken = req.cookies.accessToken;
   if (!accessToken) {
     return next();
   }
