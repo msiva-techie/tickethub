@@ -15,6 +15,10 @@ build:
       sync:
         infer:
           - "src/**/*.ts"
-        # manual:
-        #   - src: 'dist/**/*.js'
-        #     dest: .
+    - image: sivam96/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        infer:
+          - "src/**/*.ts"

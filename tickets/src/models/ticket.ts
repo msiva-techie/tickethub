@@ -5,7 +5,7 @@ interface TicketAttr {
   title: string;
   price: number;
   totalQuantity: number;
-  sold: number;
+  sold?: number;
   userId: mongoose.Schema.Types.ObjectId;
 }
 
@@ -17,28 +17,38 @@ interface TicketModel extends mongoose.Model<TicketDoc> {
   build: (ticketDoc: TicketAttr) => TicketDoc;
 }
 
-const ticketSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
+const ticketSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    totalQuantity: {
+      type: Number,
+      required: true
+    },
+    sold: {
+      type: Number,
+      default: 0
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true
+    }
   },
-  price: {
-    type: Number,
-    required: true
-  },
-  totalQuantity: {
-    type: Number,
-    required: true
-  },
-  sold: {
-    type: Number,
-    required: true
-  },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+      }
+    }
   }
-});
+);
 
 ticketSchema.statics.build = function (tickerDoc: TicketAttr) {
   return new Ticket(tickerDoc);

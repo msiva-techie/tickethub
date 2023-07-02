@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-mongo-svc
+spec:
+  clusterIP: None
+  selector:
+    app: tickets-mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tickets-mongo
+spec:
+  replicas: 2
+  serviceName: "tickets-mongo-svc"
+  selector:
+    matchLabels:
+      app: tickets-mongo
+  template:
+    metadata:
+      labels:
+        app: tickets-mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: tickets-mongo
+          image: mongo:5.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - mongod
+            - "--bind_ip_all"
+            - "--replSet"
+            - tickets
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: tickets-mongo-volume
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: tickets-mongo-volume
+      spec: 
+        resources:
+          requests:
+            storage: 1Gi
+        accessModes: 
+          - ReadWriteOnce
+        storageClassName: local-sc

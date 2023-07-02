@@ -25,3 +25,10 @@ spec:
                 name: auth-serv
                 port:
                   number: 8000
+          - pathType: Prefix
+            path: /api/ticket/?(.*)
+            backend:
+              service:
+                name: tickets-serv
+                port:
+                  number: 8000

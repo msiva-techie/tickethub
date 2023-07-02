@@ -13,7 +13,7 @@ import { NotFoundError, DBConnectError, handleErrors, getCurrentUser } from "@si
 dotenv.config();
 
 const app: Express = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 
 // to create a connection to a nats-server:
 // (async () => {
