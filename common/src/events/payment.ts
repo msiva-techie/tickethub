@@ -13,3 +13,17 @@ export interface PaymentCompletedEvent {
     quantity: number;
   };
 }
+
+export interface PaymentRefundEvent {
+  subject: Subjects.PaymentRefund;
+  data: {
+    paymentId: string;
+    orderId: string;
+    userId: string;
+    ticket: {
+      ticketId: string;
+      price: number;
+    };
+    quantity: number;
+  };
+}

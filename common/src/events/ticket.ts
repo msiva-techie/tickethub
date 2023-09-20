@@ -6,6 +6,7 @@ export interface TicketCreatedEvent {
     ticketId: string;
     title: string;
     price: number;
+    description: string;
     totalQuantity: number;
     sold: number;
     userId: string;
@@ -19,6 +20,7 @@ export interface TicketUpdatedEvent {
     ticketId: string;
     title: string;
     price: number;
+    description: string;
     totalQuantity: number;
     sold: number;
     userId: string;

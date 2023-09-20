@@ -4,6 +4,7 @@ export enum Subjects {
   OrderCompleted = "order.completed",
 
   PaymentCompleted = "payment.completed",
+  PaymentRefund = "payment.refund",
 
   ExpirationCompleted = "expiration.completed",
 
