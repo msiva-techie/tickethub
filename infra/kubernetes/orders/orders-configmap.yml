@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tickets-config
+  name: orders-config
 data:
   mongoUrl: "mongodb://tickets-mongo-0.tickets-mongo-svc.default.svc.cluster.local:27017,tickets-mongo-1.tickets-mongo-svc.default.svc.cluster.local:27017/ticket"
   jwtKey: "auth321"
-  cookieKey: "ticket456"
+  cookieKey: "auth456"
 

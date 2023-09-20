@@ -3,7 +3,9 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface PaymentAttr {
   orderId: mongoose.Schema.Types.ObjectId;
-  stripeId: string;
+  paymentId: string;
+  userId: string;
+  refund?: boolean;
 }
 
 interface PaymentDoc extends PaymentAttr, mongoose.Document {
@@ -11,18 +13,25 @@ interface PaymentDoc extends PaymentAttr, mongoose.Document {
 }
 
 interface PaymentModel extends mongoose.Model<PaymentDoc> {
-  build: (orderDoc: PaymentAttr) => PaymentDoc;
+  build: (paymentDoc: PaymentAttr) => PaymentDoc;
 }
 
 const paymentSchema = new mongoose.Schema(
   {
+    userId: {
+      type: String,
+      required: true
+    },
     orderId: {
       type: String,
       required: true
     },
-    stripeId: {
+    paymentId: {
       type: String,
       required: true
+    },
+    refund: {
+      type: Boolean
     }
   },
   {
@@ -35,11 +44,11 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
-paymentSchema.statics.build = function (orderDoc: PaymentAttr): PaymentDoc {
-  return new Order(orderDoc);
+paymentSchema.statics.build = function (paymentDoc: PaymentAttr): PaymentDoc {
+  return new Payment(paymentDoc);
 };
 
 paymentSchema.set("versionKey", "version");
 paymentSchema.plugin(updateIfCurrentPlugin);
 
-export const Order = mongoose.model<PaymentDoc, PaymentModel>("Payment", paymentSchema);
+export const Payment = mongoose.model<PaymentDoc, PaymentModel>("Payment", paymentSchema);

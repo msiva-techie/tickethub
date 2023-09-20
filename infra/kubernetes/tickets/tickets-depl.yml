@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tickets-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tickets
+  template:
+    metadata:
+      name: tickets
+      labels:
+        app: tickets
+    spec:
+      containers:
+        - name: tickets
+          image: sivam96/tickets
+          env:
+          - name: MONGO_URI
+            valueFrom:
+              configMapKeyRef:
+                name: tickets-config
+                key: mongoUrl
+          - name: JWT_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: tickets-config
+                key: jwtKey
+          - name: COOKIE_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: tickets-config
+                key: cookieKey
+          - name: NATS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: general-config
+                key: natsUrl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tickets-serv
+spec:
+  selector:
+    app: tickets
+  ports:
+    - name: tickets
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+
+          

@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-mongo-svc
+spec:
+  clusterIP: None
+  selector:
+    app: orders-mongo
+  ports:
+  - port: 27017
+    targetPort: 27017
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: orders-mongo
+spec:
+  replicas: 2
+  serviceName: "orders-mongo-svc"
+  selector:
+    matchLabels:
+      app: orders-mongo
+  template:
+    metadata:
+      labels:
+        app: orders-mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: orders-mongo
+          image: mongo:5.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - mongod
+            - "--bind_ip_all"
+            - "--replSet"
+            - orders
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: orders-mongo-volume
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: orders-mongo-volume
+      spec: 
+        resources:
+          requests:
+            storage: 1Gi
+        accessModes: 
+          - ReadWriteOnce
+        storageClassName: local-sc

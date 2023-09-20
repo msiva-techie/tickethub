@@ -7,6 +7,7 @@ import { createTicket, deleteTicket, getAllTickets, getTicket, updateTicket } fr
 const router = express.Router();
 
 router.get("/all", getAllTickets);
+
 router.get(
   "/:ticketId",
   checkSchema({
@@ -16,8 +17,10 @@ router.get(
       trim: true
     }
   }),
+  validateRequest,
   getTicket
 );
+
 router.post(
   "/ticket",
   checkSchema({
@@ -38,6 +41,11 @@ router.post(
         }
       }
     },
+    description: {
+      errorMessage: "Please provide description",
+      notEmpty: true,
+      trim: true
+    },
     totalQuantity: {
       errorMessage: "Please provide total quantity",
       isNumeric: true
@@ -48,14 +56,10 @@ router.post(
     }
   }),
   validateRequest,
-  (req: any, res: any, next: any) => {
-    console.log(JSON.stringify(req.signedCookies));
-    console.log(JSON.stringify(req.cookies));
-    next();
-  },
   isAuthenticated,
   createTicket
 );
+
 router.put(
   "/ticket/:ticketId",
   checkSchema({
@@ -63,12 +67,43 @@ router.put(
       errorMessage: "Please provide ticketId",
       notEmpty: true,
       trim: true
+    },
+    title: {
+      optional: true,
+      notEmpty: true,
+      trim: true
+    },
+    price: {
+      optional: true,
+      isNumeric: true,
+      custom: {
+        options: (value) => {
+          if (value === 0) {
+            throw new BadRequestError("Price should be greater than 0");
+          }
+          return true;
+        }
+      }
+    },
+    description: {
+      optional: true,
+      notEmpty: true,
+      trim: true
+    },
+    totalQuantity: {
+      isNumeric: true,
+      optional: true
+    },
+    sold: {
+      isNumeric: true,
+      optional: true
     }
   }),
   validateRequest,
   isAuthenticated,
   updateTicket
 );
+
 router.delete(
   "/ticket/:ticketId",
   checkSchema({

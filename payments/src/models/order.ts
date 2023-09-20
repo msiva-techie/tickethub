@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
+import { OrderStatus } from "@sivam96/tickethub-common";
 
 interface OrderAttr {
-  status: OrderStatus;
-  userId: mongoose.Schema.Types.ObjectId;
+  id: string;
+  status?: OrderStatus;
+  userId: string;
   totalPrice: number;
 }
 
 interface OrderDoc extends OrderAttr, mongoose.Document {
+  id: string;
   version: number;
 }
 
@@ -20,7 +23,7 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: Object.values(OrderStatus),
-      default: OrderStatus.OrderCreated
+      default: OrderStatus.created
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,

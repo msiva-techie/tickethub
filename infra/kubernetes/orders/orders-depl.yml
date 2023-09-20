@@ -1,47 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tickets-depl
+  name: orders-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tickets
+      app: orders
   template:
     metadata:
-      name: tickets
+      name: orders
       labels:
-        app: tickets
+        app: orders
     spec:
       containers:
-        - name: tickets
-          image: sivam96/tickets
+        - name: orders
+          image: sivam96/orders
           env:
           - name: MONGO_URI
             valueFrom:
               configMapKeyRef:
-                name: tickets-config
+                name: orders-config
                 key: mongoUrl
           - name: JWT_KEY
             valueFrom:
               configMapKeyRef:
-                name: tickets-config
+                name: orders-config
                 key: jwtKey
           - name: COOKIE_KEY
             valueFrom:
               configMapKeyRef:
-                name: tickets-config
+                name: orders-config
                 key: cookieKey
+          - name: NATS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: general-config
+                key: natsUrl
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tickets-serv
+  name: orders-serv
 spec:
   selector:
-    app: tickets
+    app: orders
   ports:
-    - name: tickets
+    - name: orders
       protocol: TCP
       port: 8000
       targetPort: 8000
