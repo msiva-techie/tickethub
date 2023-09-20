@@ -6,24 +6,14 @@ export interface PaymentCompletedEvent {
     paymentId: string;
     orderId: string;
     userId: string;
-    ticket: {
-      ticketId: string;
-      price: number;
-    };
-    quantity: number;
+    totalPrice: number;
   };
 }
 
 export interface PaymentRefundEvent {
   subject: Subjects.PaymentRefund;
   data: {
-    paymentId: string;
     orderId: string;
     userId: string;
-    ticket: {
-      ticketId: string;
-      price: number;
-    };
-    quantity: number;
   };
 }
