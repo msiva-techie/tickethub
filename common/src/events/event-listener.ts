@@ -12,7 +12,7 @@ export abstract class EventListener<T extends Event> {
   abstract durableName: string;
   abstract onMessage(data: T["data"], msg: JsMsg): void;
 
-  constructor(private client: JetStreamClient) {}
+  constructor(private client: JetStreamClient) { }
 
   async listen() {
     const options = consumerOpts()
