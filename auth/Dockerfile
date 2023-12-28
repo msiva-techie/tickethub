@@ -1,5 +1,5 @@
 FROM node:18-bullseye-slim AS build
-WORKDIR /app
+WORKDIR /usr/src/app
 COPY package.json ./
 RUN npm install
 COPY . ./

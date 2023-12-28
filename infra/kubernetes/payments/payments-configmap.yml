@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payments-config
+data:
+  mongoUrl: "mongodb://payments-mongo-0.payments-mongo-svc.default.svc.cluster.local:27017,payments-mongo-1.payments-mongo-svc.default.svc.cluster.local:27017/ticket"
+  jwtKey: "auth321"
+  cookieKey: "auth456"
+

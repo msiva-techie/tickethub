@@ -1,9 +1,10 @@
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v4beta7
 kind: Config
-deploy:
-  kubectl:
-    manifests:
-      - ./infra/kubernetes/*
+metadata:
+  name: tickethub
+manifests:
+  rawYaml:
+    - ./infra/kubernetes/*
 build:
   local:
     push: false
@@ -12,13 +13,54 @@ build:
       context: auth
       docker:
         dockerfile: Dockerfile
+      # sync:
+      #   infer:
+      #     - "src/**/*.ts"
       sync:
-        infer:
-          - "src/**/*.ts"
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: sivam96/tickets
       context: tickets
       docker:
         dockerfile: Dockerfile
+      # sync:
+      #   infer:
+      #     - "src/**/*.ts"
       sync:
-        infer:
-          - "src/**/*.ts"
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: sivam96/orders
+      context: orders
+      docker:
+        dockerfile: Dockerfile
+      # sync:
+      #   infer:
+      #     - "src/**/*.ts"
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: sivam96/payments
+      context: payments
+      docker:
+        dockerfile: Dockerfile
+      # sync:
+      #   infer:
+      #     - "src/**/*.ts"
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: sivam96/expiration
+      context: expiration
+      docker:
+        dockerfile: Dockerfile
+      # sync:
+      #   infer:
+      #     - "src/**/*.ts"
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

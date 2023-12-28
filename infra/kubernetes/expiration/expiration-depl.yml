@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      name: expiration
+      labels:
+        app: expiration
+    spec:
+      containers:
+        - name: expiration
+          image: sivam96/expiration
+          env:
+          - name: JWT_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: expiration-config
+                key: jwtKey
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: expiration-config
+                key: redisHost
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: expiration-config
+                key: redisPort
+          - name: REDIS_PASSWORD
+            valueFrom:
+              configMapKeyRef:
+                name: expiration-config
+                key: redisPassword
+          - name: COOKIE_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: expiration-config
+                key: cookieKey
+          - name: NATS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: general-config
+                key: natsUrl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expiration-serv
+spec:
+  selector:
+    app: expiration
+  ports:
+    - name: expiration
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+
+          

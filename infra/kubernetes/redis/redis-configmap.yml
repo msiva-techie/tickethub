@@ -17,3 +17,4 @@ data:
     logfile ""
     maxmemory 1gb
     maxmemory-policy allkeys-lru
+    requirepass redis1234

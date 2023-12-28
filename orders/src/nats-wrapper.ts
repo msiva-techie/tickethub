@@ -15,17 +15,29 @@ const connectToNats = async (connectOptions: ConnectionOptions) => {
     const nc = await connect(connectOptions);
     console.log(`connected to ${nc.getServer()}`);
     const jsm = await nc.jetstreamManager();
+    // console.log('deleting old streams....');
+    // await jsm.streams.delete(Streams.Order);
+    // console.log('order deleted');
+    // await jsm.streams.delete(Streams.Expiration);
+    // console.log('expiration deleted');
+    // await jsm.streams.delete(Streams.Payment);
+    // console.log('payment deleted');
+    // await jsm.streams.delete(Streams.Ticket);
+    // console.log('ticket deleted');
+    // await jsm.streams.delete(Streams.TicketHub);
+    // console.log('tickethub deleted');
+    // console.log('all deleted......');
     await jsm.streams.add({ name: Streams.Order, subjects: [`${Streams.Order}.*`] });
     return nc.jetstream();
 };
 
 const initiateListeners = (natsClient: JetStreamClient) => {
-    new OrderCompletedEventListener(natsClient);
-    new OrderCancelledEventListener(natsClient);
-    new ExpirationCompletedEventListener(natsClient);
-    new PaymentCompletedEventListener(natsClient);
-    new TicketCreatedEventListener(natsClient);
-    new TicketUpdatedEventListener(natsClient);
+    new OrderCompletedEventListener(natsClient).listen();
+    new OrderCancelledEventListener(natsClient).listen();
+    new ExpirationCompletedEventListener(natsClient).listen();
+    new PaymentCompletedEventListener(natsClient).listen();
+    new TicketCreatedEventListener(natsClient).listen();
+    new TicketUpdatedEventListener(natsClient).listen();
 };
 
 export let orderCreatedPublisher: OrderCreatedPublisher;
@@ -51,6 +63,7 @@ export const initiateNats = async () => {
         initiateListeners(natsClient);
         initiatePublishers(natsClient);
     } catch (err) {
-        throw new Error("Couldnot connect to NATS");
+        console.log(err);
+        throw new Error("NATS Error....");
     }
 };

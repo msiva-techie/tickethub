@@ -13,67 +13,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+require("express-async-errors");
 const dotenv_1 = __importDefault(require("dotenv"));
-// import { connect, consumerOpts, createInbox } from "nats";
 const routes_1 = __importDefault(require("./routes"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const morgan_1 = __importDefault(require("morgan"));
+const body_parser_1 = require("body-parser");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const method_override_1 = __importDefault(require("method-override"));
+const tickethub_common_1 = require("@sivam96/tickethub-common");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = process.env.PORT;
-// to create a connection to a nats-server:
-// (async () => {
-//   const nc = await connect({
-//     name: "auth",
-//     servers: ["nats://nats-0.nats-svc:4222", "nats://nats-1.nats-svc:4222", "nats://nats-2.nats-svc:4222"]
-//   });
-//   console.log(`connected to ${nc.getServer()}`);
-//   const jsm = await nc.jetstreamManager();
-//   await jsm.streams.add({ name: "nats-poc", subjects: ["nats-poc.*"] });
-//   // await jsm.streams.delete('nats-poc');
-//   // create a jetstream client:
-//   const js = nc.jetstream();
-//   const data = {
-//     message: "hello from server1, GM1"
-//   };
-//   const buffer = Buffer.from(JSON.stringify(data), "utf-8");
-//   await js.publish("nats-poc.test", buffer);
-//   console.log("message published......");
-//   const options = consumerOpts()
-//     .deliverAll()
-//     .ackExplicit()
-//     .manualAck()
-//     .ackWait(5000)
-//     .deliverGroup("nats-poc")
-//     .durable("nats-poc-d")
-//     .deliverTo(createInbox());
-//   const sub = await js.subscribe("nats-poc.test", options);
-//   console.log("messages in server2...........");
-//   for await (const m of sub) {
-//     console.log("message......");
-//     console.log(m.subject);
-//     console.log(JSON.parse(m.data.toString()));
-//     m.ack();
-//   }
-// })();
+const port = process.env.PORT || 8000;
 (() => __awaiter(void 0, void 0, void 0, function* () {
     if (!process.env.MONGO_URI) {
         throw new Error("MONGO URI is not defined");
     }
-    if (!process.env.JWT_KEY) {
-        throw new Error("JWT_KEY is not defined.........");
+    if (!process.env.COOKIE_KEY) {
+        throw new Error("COOKIE_KEY is not defined........");
     }
-    yield mongoose_1.default.connect(process.env.MONGO_URI);
+    if (!process.env.JWT_KEY) {
+        throw new Error("JWT_KEY is not defined........");
+    }
+    try {
+        yield mongoose_1.default.connect(process.env.MONGO_URI);
+        console.log("mongodb connected........");
+    }
+    catch (err) {
+        throw new tickethub_common_1.DBConnectError();
+    }
+    app.use((0, morgan_1.default)("dev"));
+    app.use((0, body_parser_1.json)());
+    app.use((0, cookie_parser_1.default)(process.env.COOKIE_KEY));
+    app.use((0, method_override_1.default)());
+    app.use(tickethub_common_1.getCurrentUser);
+    app.use(routes_1.default);
+    app.all("*", () => {
+        throw new tickethub_common_1.NotFoundError();
+    });
+    app.use(tickethub_common_1.handleErrors);
+    app.listen(port, () => console.log(`Server running  the port ${port}`));
 }))();
-app.use(routes_1.default);
-app.use((req) => {
-    console.log("url.............");
-    console.log(req.url);
-});
-app.use("*", (req, res) => {
-    res.status(404).jsonp([
-        {
-            message: "Not Found"
-        }
-    ]);
-});
-app.listen(port, () => console.log(`Server running  the port ${port}`));

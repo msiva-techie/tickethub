@@ -33,8 +33,8 @@ router.get("/all", isAuthenticated, getAllOrders);
 router.post(
     "/",
     checkSchema({
-        orderId: {
-            errorMessage: "Please provide orderId",
+        ticketId: {
+            errorMessage: "Please provide ticketId",
             notEmpty: true,
             trim: true
         },

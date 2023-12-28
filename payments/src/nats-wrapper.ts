@@ -1,4 +1,4 @@
-import { Streams } from "@sivam96/tickethub-common";
+import { Streams, Subjects } from "@sivam96/tickethub-common";
 import { connect, ConnectionOptions, JetStreamClient } from "nats";
 import { PaymentCompletedPublisher } from "./events/publishers/payment-completed";
 import { OrderCancelledEventListener } from "./events/listeners/order-cancelled";
@@ -13,8 +13,8 @@ const connectToNats = async (connectOptions: ConnectionOptions) => {
 };
 
 const initiateListeners = (natsClient: JetStreamClient) => {
-    new OrderCreatedEventListener(natsClient);
-    new OrderCancelledEventListener(natsClient);
+    new OrderCreatedEventListener(natsClient).listen();
+    new OrderCancelledEventListener(natsClient).listen();
 };
 
 export let paymentCompletedPublisher: PaymentCompletedPublisher;
@@ -32,6 +32,7 @@ export const initiateNats = async () => {
         initiateListeners(natsClient);
         initiatePublishers(natsClient);
     } catch (err) {
-        throw new Error("Couldnot connect to NATS");
+        console.log(err);
+        throw new Error("NATS Error");
     }
 };

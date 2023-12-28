@@ -30,7 +30,7 @@ const port = process.env.PORT || 8000;
 
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log("mongodb connected........");
+        console.log("mongodb connected.......");
     } catch (err) {
         throw new DBConnectError();
     }

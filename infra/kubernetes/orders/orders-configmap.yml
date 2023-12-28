@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: orders-config
 data:
-  mongoUrl: "mongodb://tickets-mongo-0.tickets-mongo-svc.default.svc.cluster.local:27017,tickets-mongo-1.tickets-mongo-svc.default.svc.cluster.local:27017/ticket"
+  mongoUrl: "mongodb://orders-mongo-0.orders-mongo-svc.default.svc.cluster.local:27017,orders-mongo-1.orders-mongo-svc.default.svc.cluster.local:27017/ticket"
   jwtKey: "auth321"
   cookieKey: "auth456"
 

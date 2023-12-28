@@ -6,4 +6,4 @@ provisioner: docker.io/hostpath
 volumeBindingMode: Immediate
 reclaimPolicy: Delete
 parameters:
-  path: /c/k8s/
+  path: /mnt/host/c/k8svolume

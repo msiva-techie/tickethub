@@ -1,34 +1,48 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-service
-  annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    name: ingress-service
+    annotations:
+        nginx.ingress.kubernetes.io/use-regex: 'true'
+        nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
-  ingressClassName: nginx
-  rules:
-    - host: ticket.dev
-      http:
-        paths:
-          # - pathType: Prefix
-          #   path: /
-          #   backend:
-          #     service:
-          #       name: auth-serv
-          #       port:
-          #         number: 8000
-          - pathType: Prefix
-            path: /api/auth/?(.*)
-            backend:
-              service:
-                name: auth-serv
-                port:
-                  number: 8000
-          - pathType: Prefix
-            path: /api/ticket/?(.*)
-            backend:
-              service:
-                name: tickets-serv
-                port:
-                  number: 8000
+    ingressClassName: nginx
+    rules:
+        - host: ticketshub.dev
+          http:
+              paths:
+                  - pathType: Prefix
+                    path: /api/auth/?(.*)
+                    backend:
+                        service:
+                            name: auth-serv
+                            port:
+                                number: 8000
+                  - pathType: Prefix
+                    path: /api/ticket/?(.*)
+                    backend:
+                        service:
+                            name: tickets-serv
+                            port:
+                                number: 8000
+                  - pathType: Prefix
+                    path: /api/order/?(.*)
+                    backend:
+                        service:
+                            name: orders-serv
+                            port:
+                                number: 8000
+                  - pathType: Prefix
+                    path: /api/payment/?(.*)
+                    backend:
+                        service:
+                            name: payments-serv
+                            port:
+                                number: 8000
+                  - pathType: Prefix
+                    path: /api/expiration/?(.*)
+                    backend:
+                        service:
+                            name: expiration-serv
+                            port:
+                                number: 8000

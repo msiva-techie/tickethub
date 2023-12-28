@@ -14,19 +14,32 @@ const connectToNats = async (connectOptions: ConnectionOptions) => {
 export let ticketCreatedEventPublisher: TicketCreatedEventPublisher;
 export let ticketUpdatedEventPublisher: TicketUpdatedEventPublisher;
 
-const initiatePublishers = (natsClient: JetStreamClient) => {
+const initiatePublishers = async (natsClient: JetStreamClient) => {
     ticketCreatedEventPublisher = new TicketCreatedEventPublisher(natsClient);
     ticketUpdatedEventPublisher = new TicketUpdatedEventPublisher(natsClient);
+    // console.log('sterted publisher......');
+    // await ticketUpdatedEventPublisher.publish({
+    //     ticketId: 'test',
+    //     title: 'test',
+    //     price: 123,
+    //     description: 'test',
+    //     totalQuantity: 123,
+    //     sold: 123,
+    //     userId: 'test',
+    //     version: 123
+    // });
+    // console.log('sterted publisher.....done.');
 };
 
 export const initiateNats = async () => {
     try {
         const natsClient = await connectToNats({
-            name: Streams.Order,
+            name: Streams.Ticket,
             servers: process.env.NATS_URL!.split(",")
         });
-        initiatePublishers(natsClient);
+        await initiatePublishers(natsClient);
     } catch (err) {
-        throw new Error("Couldnot connect to NATS");
+        console.log(err);
+        throw new Error("NATS Error");
     }
 };

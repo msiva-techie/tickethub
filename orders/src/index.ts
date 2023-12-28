@@ -21,20 +21,20 @@ const port = process.env.PORT || 8000;
     }
 
     if (!process.env.COOKIE_KEY) {
-        throw new Error("COOKIE_KEY is not defined.......");
+        throw new Error("COOKIE_KEY is not defined........");
     }
 
     if (!process.env.JWT_KEY) {
-        throw new Error("JWT_KEY is not defined.......");
+        throw new Error("JWT_KEY is not defined.........");
     }
 
     if (!process.env.NATS_URL) {
-        throw new Error("NATS URL is not defined.......");
+        throw new Error("NATS URL is not defined......");
     }
 
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log("mongodb connected........");
+        console.log("mongodb connected.........");
     } catch (err) {
         throw new DBConnectError();
     }

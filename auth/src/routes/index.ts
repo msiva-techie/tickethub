@@ -5,6 +5,13 @@ import { validateRequest, isAuthenticated } from "@sivam96/tickethub-common";
 
 const router = express.Router();
 
+router.get(
+  "/",
+  (req, res) => {
+    res.jsonp({ message: "hello123" });
+  }
+);
+
 router.post(
   "/signin",
   checkSchema({

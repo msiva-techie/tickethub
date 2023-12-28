@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments
+  template:
+    metadata:
+      name: payments
+      labels:
+        app: payments
+    spec:
+      containers:
+        - name: payments
+          image: sivam96/payments
+          env:
+          - name: MONGO_URI
+            valueFrom:
+              configMapKeyRef:
+                name: payments-config
+                key: mongoUrl
+          - name: JWT_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: payments-config
+                key: jwtKey
+          - name: COOKIE_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: payments-config
+                key: cookieKey
+          - name: NATS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: general-config
+                key: natsUrl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-serv
+spec:
+  selector:
+    app: payments
+  ports:
+    - name: payments
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+
+          

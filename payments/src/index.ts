@@ -11,7 +11,6 @@ import { NotFoundError, DBConnectError, handleErrors, getCurrentUser } from "@si
 import { initiateNats } from "./nats-wrapper";
 
 dotenv.config();
-
 const app: Express = express();
 const port = process.env.PORT || 8000;
 
@@ -21,11 +20,11 @@ const port = process.env.PORT || 8000;
   }
 
   if (!process.env.COOKIE_KEY) {
-    throw new Error("COOKIE_KEY is not defined.......");
+    throw new Error("COOKIE_KEY is not defined..........");
   }
 
   if (!process.env.JWT_KEY) {
-    throw new Error("JWT_KEY is not defined.......");
+    throw new Error("JWT_KEY is not definedd.......");
   }
 
   if (!process.env.NATS_URL) {
@@ -34,7 +33,7 @@ const port = process.env.PORT || 8000;
 
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("mongodb connected........");
+    console.log("mongodb connected.........");
   } catch (err) {
     throw new DBConnectError();
   }

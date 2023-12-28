@@ -5,7 +5,7 @@ import { doPayment, getAllPayments, getAllPaymentsOfUser, getPayment } from "../
 
 const router = express.Router();
 
-router.get("/",
+router.get("/user/all",
     isAuthenticated,
     getAllPaymentsOfUser
 );

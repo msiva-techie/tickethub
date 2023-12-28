@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: redis
 spec:
-  serviceName: redis
+  serviceName: redis-serv
   replicas: 3
   selector:
     matchLabels:
@@ -66,7 +66,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis
+  name: redis-serv
 spec:
   clusterIP: None
   ports:
